@@ -169,7 +169,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     console.log(base64Image)
     // Insert image data into MongoDB
     const addmenu = new Image({
-      // standard : req.body.standard,
+      standard : req.body.standard,
       originalname: req.file.originalname,
       data: base64Image
     });
