@@ -9,6 +9,9 @@ const menuItemsSchema = new mongoose.Schema({
     lname: {
         type: String
     },
+    rollno : {
+        type : String
+    },
     zender : {
         type : String
     },
@@ -28,6 +31,9 @@ const menuItemsSchema = new mongoose.Schema({
         type: Number,
         minlength: 10,
         maxlength: 10
+    },
+    password: {
+        type: String
     },
     complains: [
         {
