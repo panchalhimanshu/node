@@ -24,7 +24,6 @@ app.get("/", (req, res) => {
 app.get("/students",async(req,res)=>{
   try{
    const data = await MenueItem.find();
-  //  console.log("menu fatched");
    res.status(200).json(data)
   }catch(err){
     console.log(err);
@@ -46,17 +45,35 @@ app.get("/teachers",async(req,res)=>{
 })
 
 
-// app.get("/menuitem/:id",async(req,res)=>{
-//   try{
-//     const userid = req.params.id
-//    const data = await MenueItem.find({userid});
-//   //  console.log("menu fatched");
-//    res.status(200).json(data)
-//   }catch(err){
-//     console.log(err);
-//     res.status(500).json({error:"internal server error"})
-//   }
-// })
+app.get("/students/:id",async(req,res)=>{
+  try{
+    const {id} = req.params
+
+   const data = await MenueItem.find({ _id: id });
+   console.log(data)
+
+   res.status(200).json(data)
+  }catch(err){
+    console.log(err);
+    res.status(500).json({error:"internal server error"})
+  }
+})
+
+
+
+app.get("/teachers/:id",async(req,res)=>{
+  try{
+    const {id} = req.params
+
+   const data = await Teacher.find({ _id: id });
+   console.log(data)
+
+   res.status(200).json(data)
+  }catch(err){
+    console.log(err);
+    res.status(500).json({error:"internal server error"})
+  }
+})
 
 
 app.post("/students",async(req,res)=>{
@@ -84,22 +101,40 @@ app.post("/teachers",async(req,res)=>{
      res.status(500).json({error:"internal server error"})
   }
 })
-app.put('/students/:id', async (req, res) => {
+
+app.put('/teachers/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const { surname, fname, lname,subject, birthdate, standard, age, email, phonenumber } = req.body;
+      const updatedStudent = await Teacher.findByIdAndUpdate(id, { surname, fname, lname,subject, birthdate, standard, age, email, phonenumber }, { new: true });
+      
+      if (!updatedStudent) {
+          return res.status(404).json({ message: "teachers not found." });
+      }
+      
+      res.json(updatedStudent);
+  } catch (err) {
+      res.status(400).json({ message: err.message });
+  }
+});
+
+// app.put('/students/:id', async (req, res) => {
 //   try {
-//     const { id } = req.params;
-//     const { complain } = req.body; // Assuming you're sending only one complaint at a time from the frontend
-//     const student = await MenueItem.findById(id);
-//     if (!student) {
-//         return res.status(404).json({ message: "Student not found." });
-//     }
-//     student.complains.push({ complain });
-//     await student.save();
-//     res.json(student);
-// } catch (err) {
-//     res.status(400).json({ message: err.message });
-// }
+//    const updatedStudent = await MenueItem.findByIdAndUpdate(id, { surname, fname, lname, birthdate,rollno, standard, age, email, phonenumber }, { new: true });
+      
+//       if (!updatedStudent) {
+//           return res.status(404).json({ message: "Student not found." });
+//       }
+      
+//       res.json(updatedStudent);
+//   } catch (err) {
+//       res.status(400).json({ message: err.message });
+//   }      const { id } = req.params;
+//       const { surname, fname, lname, birthdate,rollno, standard, age, email, phonenumber } = req.body;
+   
+// });
 
-
+app.put('/students/:id', async (req, res) => {
 try {
   const { id } = req.params;
   const { date } = req.body;
@@ -117,23 +152,6 @@ try {
 }
 
 
-// try {
-//   const { id } = req.params;/
-//   const { complain } = req.body; // Assuming you're sending a single complaint from the frontend
-//   const student = await MenueItem.findById(id);
-//   if (!student) {
-//       return res.status(404).json({ message: "Student not found." });
-//   }
-  
-//   // Push the complaint into the complains array
-//   student.complains.push(complain);
-  
-//   await student.save();
-//   res.json(student);
-// } catch (err) {
-//   res.status(400).json({ message: err.message });
-// }
-
 });
 
 
@@ -147,7 +165,6 @@ app.delete('/students/:id', async (req, res) => {
   }
 });
 
-
 app.delete('/teachers/:id', async (req, res) => {
   try {
     const userid = req.params.id
@@ -157,11 +174,6 @@ app.delete('/teachers/:id', async (req, res) => {
   }
 });
 
-
-
-
-
-
 app.post('/upload', upload.single('image'), async (req, res) => {
   try {
     // Convert image data to Base64
@@ -170,6 +182,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     // Insert image data into MongoDB
     const addmenu = new Image({
       standard : req.body.standard,
+      subject : req.body.subject,
       originalname: req.file.originalname,
       data: base64Image
     });
