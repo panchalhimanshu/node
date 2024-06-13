@@ -183,6 +183,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const addmenu = new Image({
       standard : req.body.standard,
       subject : req.body.subject,
+      date : req.body.date,
       originalname: req.file.originalname,
       data: base64Image
     });
