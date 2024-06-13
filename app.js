@@ -196,6 +196,15 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   } 
 });
 
+app.delete('/upload/:id', async (req, res) => {
+  try {
+    const userid = req.params.id
+    const userupdatedatas = await Image.findByIdAndDelete(userid)
+  } catch (error) {
+    console.log(error + "patch")
+  }
+});
+
 app.get('/images', async (req, res) => {
   try {
     const images = await Image.find();
