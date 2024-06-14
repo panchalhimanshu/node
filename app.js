@@ -20,7 +20,6 @@ app.get("/", (req, res) => {
 });
 
 
-////menu items/////
 app.get("/students",async(req,res)=>{
   try{
    const data = await MenueItem.find();
@@ -30,7 +29,6 @@ app.get("/students",async(req,res)=>{
     res.status(500).json({error:"internal server error"})
   }
 })
-
 
 
 app.get("/teachers",async(req,res)=>{
@@ -58,7 +56,6 @@ app.get("/students/:id",async(req,res)=>{
     res.status(500).json({error:"internal server error"})
   }
 })
-
 
 
 app.get("/teachers/:id",async(req,res)=>{
@@ -126,7 +123,7 @@ app.put('/teachers/:id', async (req, res) => {
 //           return res.status(404).json({ message: "Student not found." });
 //       }
       
-//       res.json(updatedStudent);
+      // res.json(updatedStudent);
 //   } catch (err) {
 //       res.status(400).json({ message: err.message });
 //   }      const { id } = req.params;
@@ -139,21 +136,35 @@ try {
   const { id } = req.params;
   const { date } = req.body;
   const { complain } = req.body;
-  const student = await MenueItem.findById(id);
-  if (!student) {
-      return res.status(404).json({ message: "Student not found." });
-  }
+  const { surname, fname, lname, birthdate,rollno, standard, age, email, phonenumber } = req.body;
 
-  student.complains.push({date, complain })
-  await student.save();
-  res.json(student);
+  if(date && complain)
+    {
+      const student = await MenueItem.findById(id);
+      if (!student) {
+          return res.status(404).json({ message: "Student not found." });
+      }
+    
+      student.complains.push({date, complain })
+      await student.save();
+      res.json(student);
+    }
+
+    else{
+
+        const updatedStudent = await MenueItem.findByIdAndUpdate(id, { surname, fname, lname, birthdate,rollno, standard, age, email, phonenumber }, { new: true });
+           
+           if (!updatedStudent) {
+               return res.status(404).json({ message: "Student not found." });
+           }
+           res.json(updatedStudent);
+
+    }
+ 
 } catch (err) {
   res.status(400).json({ message: err.message });
 }
-
-
 });
-
 
 
 app.delete('/students/:id', async (req, res) => {
@@ -214,6 +225,8 @@ app.get('/images', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
 
 
 
