@@ -115,21 +115,7 @@ app.put('/teachers/:id', async (req, res) => {
   }
 });
 
-// app.put('/students/:id', async (req, res) => {
-//   try {
-//    const updatedStudent = await MenueItem.findByIdAndUpdate(id, { surname, fname, lname, birthdate,rollno, standard, age, email, phonenumber }, { new: true });
-      
-//       if (!updatedStudent) {
-//           return res.status(404).json({ message: "Student not found." });
-//       }
-      
-      // res.json(updatedStudent);
-//   } catch (err) {
-//       res.status(400).json({ message: err.message });
-//   }      const { id } = req.params;
-//       const { surname, fname, lname, birthdate,rollno, standard, age, email, phonenumber } = req.body;
-   
-// });
+
 
 app.put('/students/:id', async (req, res) => {
 try {
