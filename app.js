@@ -19,7 +19,6 @@ app.get("/", (req, res) => {
   res.send("hello its me");
 });
 
-
 app.get("/students",async(req,res)=>{
   try{
    const data = await MenueItem.find();
@@ -29,7 +28,6 @@ app.get("/students",async(req,res)=>{
     res.status(500).json({error:"internal server error"})
   }
 })
-
 
 app.get("/teachers",async(req,res)=>{
   try{
@@ -41,7 +39,6 @@ app.get("/teachers",async(req,res)=>{
     res.status(500).json({error:"internal server error"})
   }
 })
-
 
 app.get("/students/:id",async(req,res)=>{
   try{
@@ -57,7 +54,6 @@ app.get("/students/:id",async(req,res)=>{
   }
 })
 
-
 app.get("/teachers/:id",async(req,res)=>{
   try{
     const {id} = req.params
@@ -71,7 +67,6 @@ app.get("/teachers/:id",async(req,res)=>{
     res.status(500).json({error:"internal server error"})
   }
 })
-
 
 app.post("/students",async(req,res)=>{
   try{
@@ -115,7 +110,21 @@ app.put('/teachers/:id', async (req, res) => {
   }
 });
 
-
+// app.put('/students/:id', async (req, res) => {
+//   try {
+//    const updatedStudent = await MenueItem.findByIdAndUpdate(id, { surname, fname, lname, birthdate,rollno, standard, age, email, phonenumber }, { new: true });
+      
+//       if (!updatedStudent) {
+//           return res.status(404).json({ message: "Student not found." });
+//       }
+      
+      // res.json(updatedStudent);
+//   } catch (err) {
+//       res.status(400).json({ message: err.message });
+//   }      const { id } = req.params;
+//       const { surname, fname, lname, birthdate,rollno, standard, age, email, phonenumber } = req.body;
+   
+// });
 
 app.put('/students/:id', async (req, res) => {
 try {
@@ -151,7 +160,6 @@ try {
   res.status(400).json({ message: err.message });
 }
 });
-
 
 app.delete('/students/:id', async (req, res) => {
   try {
@@ -211,9 +219,5 @@ app.get('/images', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-
-
-
 
 app.listen(2000, () => console.log("connected to port 2000"));
