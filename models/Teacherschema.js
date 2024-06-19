@@ -21,10 +21,16 @@ const teachersSchema = new mongoose.Schema({
     birthdate : {
         type : String
     },
+    mainstandard : {
+        type : String
+    },
     standard : {
         type : String
     },
     email : {
+        type : String
+    },
+    password : {
         type : String
     },
     phonenumber : {
