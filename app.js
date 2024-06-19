@@ -97,8 +97,8 @@ app.post("/teachers",async(req,res)=>{
 app.put('/teachers/:id', async (req, res) => {
   try {
       const { id } = req.params;
-      const { surname, fname, lname,subject, birthdate, standard, age, email, phonenumber } = req.body;
-      const updatedStudent = await Teacher.findByIdAndUpdate(id, { surname, fname, lname,subject, birthdate, standard, age, email, phonenumber }, { new: true });
+      const { surname, fname, lname,subject, birthdate, standard,mainstandard,password, age, email, phonenumber } = req.body;
+      const updatedStudent = await Teacher.findByIdAndUpdate(id, { surname,password, fname, lname,subject, birthdate, standard,mainstandard, age, email, phonenumber }, { new: true });
       
       if (!updatedStudent) {
           return res.status(404).json({ message: "teachers not found." });
