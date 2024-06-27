@@ -33,6 +33,9 @@ const teachersSchema = new mongoose.Schema({
     password : {
         type : String
     },
+    schoolid: {
+        type: String,
+    },
     phonenumber : {
         type : Number,
         minlength :10,
