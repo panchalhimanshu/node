@@ -1,6 +1,8 @@
 const express = require("express");
 const db = require("./db");
 const MenueItem = require("./models/MenuItem")
+const admin = require("./models/adminschema")
+
 const Teacher = require("./models/Teacherschema")
 const Image = require("./models/images")
 
@@ -19,9 +21,24 @@ app.get("/", (req, res) => {
   res.send("hello its me");
 });
 
-app.get("/students",async(req,res)=>{
+
+app.post("/admin",async(req,res)=>{
   try{
-   const data = await MenueItem.find();
+    const data = req.body;
+    const addmenu = new admin(data);
+    const response = await addmenu.save()
+    console.log("admin added");
+    res.status(200).json(response)
+  }catch(err){
+     console.log(err);
+     res.status(500).json({error:"internal server error"})
+  }
+})
+
+
+app.get("/adminlogin",async(req,res)=>{
+  try{
+   const data = await admin.find();
    res.status(200).json(data)
   }catch(err){
     console.log(err);
@@ -29,9 +46,66 @@ app.get("/students",async(req,res)=>{
   }
 })
 
-app.get("/teachers",async(req,res)=>{
+
+// app.get("/students",async(req,res)=>{
+//   try{
+//    const data = await MenueItem.find();
+//    res.status(200).json(data)
+//   }catch(err){
+//     console.log(err);
+//     res.status(500).json({error:"internal server error"})
+//   }
+// })
+
+app.get("/studentlogin",async(req,res)=>{
+
+  try{
+   const data = await MenueItem.find();
+   console.log("Student fatched");
+   res.status(200).json(data)
+  }catch(err){
+    console.log(err);
+    res.status(500).json({error:"internal server error"})
+  }
+})
+
+app.get("/teacherlogin",async(req,res)=>{
+
   try{
    const data = await Teacher.find();
+   console.log("Teacher fatched");
+   res.status(200).json(data)
+  }catch(err){
+    console.log(err);
+    res.status(500).json({error:"internal server error"})
+  }
+})
+
+
+app.get("/students/:schoolid", async (req, res) => {
+  const schoolid = req.params.schoolid; // Retrieve schoolid from request parameters
+
+  try {
+    // Query MenuItem collection for documents matching the schoolid
+    const data = await MenueItem.find({ schoolid: schoolid });
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({ error: "No students found for this schoolid" });
+    }
+
+    // If data found, send it back as JSON response
+    res.status(200).json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/teachers/:schoolid",async(req,res)=>{
+
+  const schoolid = req.params.schoolid;
+  try{
+   const data = await Teacher.find({schoolid: schoolid });
    console.log("menu fatched");
    res.status(200).json(data)
   }catch(err){
@@ -40,7 +114,7 @@ app.get("/teachers",async(req,res)=>{
   }
 })
 
-app.get("/students/:id",async(req,res)=>{
+app.get("/studentss/:id",async(req,res)=>{
   try{
     const {id} = req.params
 
@@ -54,7 +128,7 @@ app.get("/students/:id",async(req,res)=>{
   }
 })
 
-app.get("/teachers/:id",async(req,res)=>{
+app.get("/teacherss/:id",async(req,res)=>{
   try{
     const {id} = req.params
 
@@ -189,6 +263,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
       standard : req.body.standard,
       subject : req.body.subject,
       date : req.body.date,
+      schoolid : req.body.schoolid,
       originalname: req.file.originalname,
       data: base64Image
     });
@@ -210,9 +285,12 @@ app.delete('/upload/:id', async (req, res) => {
   }
 });
 
-app.get('/images', async (req, res) => {
+app.get('/images/:schoolid', async (req, res) => {
+
+  const schoolid = req.params.schoolid;
+
   try {
-    const images = await Image.find();
+    const images = await Image.find({schoolid: schoolid });
     res.json(images);
   } catch (error) {
     console.error('Error fetching images:', error);
