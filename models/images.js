@@ -8,7 +8,10 @@ const imageSchema = new mongoose.Schema({
     },
     data : {
         type : String
-    }
+    },
+    schoolid: {
+        type: String,
+    },
 })
 
 const Image = mongoose.model("image", imageSchema);
